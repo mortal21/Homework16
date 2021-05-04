@@ -5,7 +5,6 @@ import io.restassured.http.ContentType;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Order;
 import pets.newPet.Pet;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -15,10 +14,10 @@ public class POST200 {
     private static final int ID = 4;
     private static final String NAME = "Doge 4";
     private static final String STATUS = "Active";
+    private static final String URL = "https://petstore.swagger.io/v2/pet/";
 
     @Test
-    @Order(1)
-    public void post() {
+    public void post200() {
         Pet myPet1 = new Pet();
         myPet1.setId(ID);
         myPet1.setName(NAME);
@@ -29,19 +28,15 @@ public class POST200 {
                 .filter(new RequestLoggingFilter())
                 .filter(new ResponseLoggingFilter())
                 .body(myPet1)
-                .post("https://petstore.swagger.io/v2/pet/")
+                .post(URL)
                 .then()
                 .statusCode(200)
                 .assertThat()
                 .body("name", equalTo(NAME))
                 .body("status", equalTo(STATUS));
-    }
 
-    @Test
-    @Order(2)
-    public void get() {
         RestAssured.when()
-                .get("https://petstore.swagger.io/v2/pet/" + ID)
+                .get(URL + ID)
                 .then()
                 .statusCode(200)
                 .assertThat()

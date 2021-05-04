@@ -5,23 +5,18 @@ import io.restassured.http.ContentType;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Order;
 import pets.newPet.Pet;
 
 public class PUT404 {
 
     private static final int ID = 48151;
+    private static final String URL = "https://petstore.swagger.io/v2/pet/";
 
     @Test
-    @Order(1)
-    public void delete() {
+    public void put404() {
         RestAssured.when()
-                .delete("https://petstore.swagger.io/v2/pet/" + ID);
-    }
+                .delete(URL + ID);
 
-    @Test
-    @Order(2)
-    public void put() {
         final String changedName = "Changed Doge 48151";
         final String status = "Active";
         Pet myChangedPet = new Pet();
@@ -35,7 +30,7 @@ public class PUT404 {
                 .filter(new ResponseLoggingFilter())
                 .body(myChangedPet)
                 .when()
-                .put("https://petstore.swagger.io/v2/pet")
+                .put(URL)
                 .then()
                 .statusCode(404)                                        // Тест упадёт, так как будет 200
                 .assertThat();
